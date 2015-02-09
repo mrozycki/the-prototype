@@ -26,6 +26,7 @@ end
 
 function love.update(dt)
   objects.camera:update(dt)
+  objects.player:update(dt)
   world:update(dt)
 
   if love.keyboard.isDown("escape") then

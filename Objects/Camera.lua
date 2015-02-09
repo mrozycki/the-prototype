@@ -2,6 +2,7 @@ Camera = class("Camera") -- creates a Camera class
 
 function Camera:initialize(world, floor, x, y)
   self.body = love.physics.newBody(world, x, y, "dynamic")
+  self.body:setMass(0.5)
   self.floorJoint = love.physics.newFrictionJoint(floor.body, self.body, x, y)
   self.floorJoint:setMaxForce(700)
 end
