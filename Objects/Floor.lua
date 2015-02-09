@@ -1,9 +1,6 @@
 Floor = class("Floor")
 
-function Floor:initialize(world, width, height)
-  self.body = love.physics.newBody(world, 0, 0)
-  self.shape = love.physics.newRectangleShape(width, height)
-  self.fixture = love.physics.newFixture(self.body, self.shape)
+function Floor:initialize()
 end
 
 function Floor:draw(camera)

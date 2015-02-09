@@ -3,6 +3,7 @@ class = require 'lib.middleclass'
 
 require 'Objects.Floor'
 require 'Objects.Camera'
+require 'Objects.Bullet'
 require 'Objects.Player'
 
 function love.load()
@@ -16,12 +17,13 @@ function love.load()
   world = love.physics.newWorld(0, 0, true)
 
   objects = {}
-  objects.floor = Floor(world, 10000, 10000)
+  objects.floor = Floor()
 
-  objects.camera = Camera(world, objects.floor, 
-    -love.graphics.getWidth()/2, -love.graphics.getHeight()/2
+  objects.player = Player(world, 0, 0)
+
+  objects.camera = Camera(world, objects.player,
+    0, 0, love.graphics.getWidth(), love.graphics.getHeight()
   )
-  objects.player = Player(world, objects.floor, 0, 0)
 end
 
 function love.update(dt)
