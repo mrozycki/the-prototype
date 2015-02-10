@@ -20,7 +20,7 @@ function Player:update(dt)
 end
 
 function Player:draw(camera)
-  love.graphics.setColor(0, 200, 0)
+  love.graphics.setColor(0, 255, 0)
   love.graphics.polygon("fill", 
     camera:toLocal(self.body:getWorldPoints(self.shape:getPoints()))
   )
@@ -37,21 +37,17 @@ function Player:move(dt)
   if love.keyboard.isDown("a") then
     dx = dx - dt
   end
-
   if love.keyboard.isDown("d") then
     dx = dx + dt
   end
-
   if love.keyboard.isDown("w") then
     dy = dy - dt
   end
-
   if love.keyboard.isDown("s") then
     dy = dy + dt
   end
 
   local magnitude = math.sqrt(dx*dx + dy*dy)
-
   if magnitude > 0 then
     self.body:applyForce(dx*self.maxPushForce/magnitude, dy*self.maxPushForce/magnitude)
   end

@@ -19,7 +19,7 @@ function Bullet:update(dt)
 end
 
 function Bullet:draw(camera)
-  love.graphics.setColor(0, 200, 0)
+  love.graphics.setColor(0, 255, 0)
   love.graphics.polygon("fill", camera:toLocal(self.body:getWorldPoints(self.shape:getPoints())))
 end
 
