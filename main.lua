@@ -8,18 +8,16 @@ require 'Objects.Player'
 function love.load()
   world = love.physics.newWorld(0, 0, true)
 
+  player = Player(world, 0, 0)
+  camera = Camera(player)
+
   objects = {}
   objects.floor = Floor()
-  objects.player = Player(world, 0, 0)
-  objects.camera = Camera(world, objects.player, 0, 0, 
-    love.graphics.getWidth(), love.graphics.getHeight()
-  )
 end
 
 function love.update(dt)
-  objects.camera:update(dt)
-  objects.player:update(dt)
   world:update(dt)
+  player:update(dt)
 
   if love.keyboard.isDown("escape") then
     love.event.quit()
@@ -27,6 +25,8 @@ function love.update(dt)
 end
 
 function love.draw()
-  objects.floor:draw(objects.camera)
-  objects.player:draw(objects.camera)
+  camera:set()
+  objects.floor:draw(camera:getX(), camera:getY())
+  player:draw(camera)
+  camera:unset()
 end

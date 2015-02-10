@@ -20,7 +20,7 @@ end
 
 function Bullet:draw(camera)
   love.graphics.setColor(0, 255, 0)
-  love.graphics.polygon("fill", camera:toLocal(self.body:getWorldPoints(self.shape:getPoints())))
+  love.graphics.polygon("fill", self.body:getWorldPoints(self.shape:getPoints()))
 end
 
 function Bullet:destroy()

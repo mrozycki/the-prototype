@@ -1,14 +1,19 @@
 Player = class("Player")
 
 function Player:initialize(world, x, y)
+  -- set some constants
   self.size = 32
+  self.maxPushForce = 2000
+  self.world = world
+  
+  -- set up physics
   self.body = love.physics.newBody(world, x, y, "dynamic")
+  self.body:setLinearDamping(5)
   self.shape = love.physics.newRectangleShape(self.size, self.size)
   self.fixture = love.physics.newFixture(self.body, self.shape)
-  self.body:setLinearDamping(5)
-  self.maxPushForce = 2000 * self.body:getMass()
+
+  -- set up bullets
   self.bullets = {}
-  self.world = world
   self.firingRate = 5
   self.nextBullet = 0
 end
@@ -21,9 +26,7 @@ end
 
 function Player:draw(camera)
   love.graphics.setColor(0, 255, 0)
-  love.graphics.polygon("fill", 
-    camera:toLocal(self.body:getWorldPoints(self.shape:getPoints()))
-  )
+  love.graphics.polygon("fill", self.body:getWorldPoints(self.shape:getPoints()))
 
   for i = 1, #self.bullets do
     self.bullets[i]:draw(camera)
