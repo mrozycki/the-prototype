@@ -5,12 +5,15 @@ function Player:initialize(world, x, y)
   self.size = 32
   self.maxPushForce = 2000
   self.world = world
+  self.maxhp = self.size*self.size
+  self.hp = self.maxhp
   
   -- set up physics
   self.body = love.physics.newBody(world, x, y, "dynamic")
   self.body:setLinearDamping(5)
   self.shape = love.physics.newRectangleShape(self.size, self.size)
   self.fixture = love.physics.newFixture(self.body, self.shape)
+  self.fixture:setUserData(self)
 
   -- set up bullets
   self.bullets = {}
@@ -19,17 +22,25 @@ function Player:initialize(world, x, y)
 end
 
 function Player:update(dt)
+  self.body:setAngle(0)
   self:updateBullets(dt)
   self:fire(dt)
   self:move(dt)
+
+  if self.hp <= 0 then
+    gamestate.switch(GameOver)
+  end
 end
 
-function Player:draw(camera)
+function Player:draw()
   love.graphics.setColor(0, 255, 0)
-  love.graphics.polygon("fill", self.body:getWorldPoints(self.shape:getPoints()))
+  local size = math.sqrt(self.size*self.size*(self.hp/self.maxhp))
+  love.graphics.rectangle("fill", 
+    self.body:getX() - size/2, self.body:getY() - size/2, size, size
+  )
 
   for i = 1, #self.bullets do
-    self.bullets[i]:draw(camera)
+    self.bullets[i]:draw()
   end
 end
 
@@ -91,11 +102,20 @@ function Player:fire(dt)
   end
 
   if xOffset then
-    self.bullets[#self.bullets + 1] = Bullet(world, self,
+    self.bullets[#self.bullets + 1] = Bullet(self.world, self,
       self.body:getX()+xOffset, self.body:getY()+yOffset,
       xVelocity+xSelfVelocity, yVelocity+ySelfVelocity,
       2.0
     )
+    self.hp = self.hp - 9
+    self.body:setMass(1 + self.fixture:getDensity() * self.hp / 1000)
     self.nextBullet = 1/self.firingRate
+  end
+end
+
+function Player:collideWith(object, collision)
+  if object:isInstanceOf(Bullet) then
+    self.hp = self.hp + 9
+    collision:setEnabled(false)
   end
 end

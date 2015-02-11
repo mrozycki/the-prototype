@@ -7,8 +7,8 @@ end
 function Camera:set()
   love.graphics.push()
   love.graphics.translate(
-    -player.body:getX() + love.graphics.getWidth()/2,
-    -player.body:getY() + love.graphics.getHeight()/2
+    -self.player.body:getX() + love.graphics.getWidth()/2,
+    -self.player.body:getY() + love.graphics.getHeight()/2
   )
 end
 
